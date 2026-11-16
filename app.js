@@ -41,8 +41,10 @@ function renderGrid(target) {
     tile.className = `day-tile ${isToday ? 'today' : available ? 'open' : 'locked'}`;
     tile.type = 'button';
     tile.disabled = !available;
-    tile.setAttribute('aria-label', available ? `Jour ${day}${readDays.has(day) ? ', déjà lu' : ', disponible'}` : `Jour ${day}, bientôt disponible`);
-    const icon = isToday ? '✦' : available ? (readDays.has(day) ? '✓' : '<img class="small-gift-icon" src="gift-icon.svg" alt="">') : '🔒';
+    tile.setAttribute('aria-label', isToday ? `Jour ${day}, aujourd’hui` : available ? `Jour ${day}, passé et ${readDays.has(day) ? 'lu' : 'consultable'}` : `Jour ${day}, verrouillé, bientôt disponible`);
+    const icon = isToday ? '✦' : available
+      ? `<span class="status-icon"><img src="lock-open-green.svg" alt="">${readDays.has(day) ? '<span class="read-indicator">✓</span>' : ''}</span>`
+      : '<span class="status-icon"><img src="lock-closed-red.svg" alt=""></span>';
     tile.innerHTML = `<span class="tile-number">${day}</span><span class="tile-icon" aria-hidden="true">${icon}</span>`;
     if (available) tile.addEventListener('click', () => openDay(day, target === $('#full-grid')));
     target.append(tile);
