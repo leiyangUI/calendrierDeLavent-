@@ -53,7 +53,12 @@ function showView(name) {
   homeView.classList.toggle('hidden', name !== 'home');
   gridView.classList.toggle('hidden', name !== 'grid');
   dayView.classList.toggle('hidden', name !== 'day');
-  document.querySelectorAll('.nav-link').forEach((button) => button.classList.toggle('active', button.dataset.view === name || (button.dataset.view === 'grid' && name === 'day')));
+  document.querySelectorAll('.tab-link').forEach((button) => {
+    const active = button.dataset.view === name || (button.dataset.view === 'grid' && name === 'day');
+    button.classList.toggle('active', active);
+    if (active) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
+  });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

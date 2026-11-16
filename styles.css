@@ -11,3 +11,11 @@
 .tile-icon{display:grid;place-items:center;line-height:1}
 .small-gift-icon{display:block;width:16px;height:16px}
 @media(max-width:700px){.small-gift-icon{width:13px;height:13px}}
+
+body{padding-bottom:92px}
+.tab-bar{position:fixed;z-index:4;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(100% - 28px,380px);display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:7px;background:#fffdf8f2;border:1px solid #eadbc7;border-radius:19px;box-shadow:0 8px 26px #493b3b24;backdrop-filter:blur(12px)}
+.tab-link{min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:13px;background:transparent;color:#817575;font-size:10px;font-weight:800;transition:background .16s,color .16s}
+.tab-link.active{background:#fff0ef;color:var(--deep-red)}
+.tab-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(min-width:900px){.tab-bar{width:300px}.tab-link{min-height:55px}}
+@media(max-width:700px){body{padding-bottom:88px}.tab-bar{width:calc(100% - 24px);bottom:max(8px,env(safe-area-inset-bottom))}}
