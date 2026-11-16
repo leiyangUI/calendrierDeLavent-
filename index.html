@@ -34,9 +34,9 @@
             <img class="gift-logo" src="gift-icon.svg" alt="" />
           </div>
           <div class="today-copy">
-            <span class="today-pill"><span></span> AUJOURD’HUI · 5 DÉCEMBRE</span>
-            <h2>Ton cadeau du jour<br />t’attend !</h2>
-            <p>Une petite pause pour sourire, rêver ou faire quelque chose de chouette.</p>
+            <span id="home-day-label" class="today-pill"><span></span> AUJOURD’HUI · 5 DÉCEMBRE</span>
+            <h2 id="home-day-title">Ton cadeau du jour t’attend !</h2>
+            <p id="home-day-summary">Une petite pause pour sourire, rêver ou faire quelque chose de chouette.</p>
             <button id="open-today" class="button button-white">Ouvrir ma surprise <span aria-hidden="true">↗</span></button>
           </div>
           <div class="card-bottom-note"><span>✦</span> Une surprise par jour jusqu’à Noël <span>✦</span></div>
@@ -83,6 +83,7 @@
 
     <div id="drawer-backdrop" class="drawer-backdrop hidden"></div>
     <aside id="day-drawer" class="day-drawer hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <button id="drawer-handle" class="drawer-handle" aria-label="Développer le tiroir" aria-expanded="false"><span></span></button>
       <button id="close-drawer" class="drawer-close" aria-label="Fermer">×</button>
       <p class="eyebrow" id="drawer-date"></p>
       <h2 id="drawer-title"></h2>
