@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fff2d8" />
+    <title>Le calendrier des surprises</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="snow snow-one" aria-hidden="true">✦</div>
+    <div class="snow snow-two" aria-hidden="true">❄</div>
+    <header class="topbar">
+      <a class="brand" href="#accueil" aria-label="Accueil du calendrier">
+        <span class="brand-icon" aria-hidden="true">🎄</span>
+        <span>Le calendrier<br /><strong>des surprises</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation principale">
+        <button class="nav-link active" data-view="home">Aujourd’hui</button>
+        <button class="nav-link" data-view="grid">La grille</button>
+      </nav>
+      <span class="demo-label"><span></span> Mode démo · 5 décembre</span>
+    </header>
+
+    <main id="app" tabindex="-1">
+      <section id="home-view" class="view">
+        <div class="intro">
+          <p class="eyebrow">UN PETIT RENDEZ-VOUS MAGIQUE</p>
+          <h1>Bonjour, <span>décembre !</span></h1>
+          <p class="intro-copy">Chaque jour cache une jolie surprise à découvrir.</p>
+        </div>
+
+        <article id="today-card" class="today-card">
+          <div class="card-sparkle sparkle-a" aria-hidden="true">✦</div>
+          <div class="card-sparkle sparkle-b" aria-hidden="true">✧</div>
+          <div class="gift-wrap" aria-hidden="true">
+            <div class="gift-bow"><i></i><i></i></div>
+            <div class="gift-box"><span></span><b>5</b></div>
+          </div>
+          <div class="today-copy">
+            <span class="today-pill"><span></span> AUJOURD’HUI · 5 DÉCEMBRE</span>
+            <h2>Ton cadeau du jour<br />t’attend !</h2>
+            <p>Une petite pause pour sourire, rêver ou faire quelque chose de chouette.</p>
+            <button id="open-today" class="button button-white">Ouvrir ma surprise <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="card-bottom-note"><span>✦</span> Une surprise par jour jusqu’à Noël <span>✦</span></div>
+        </article>
+
+        <section class="days-section" aria-labelledby="days-heading">
+          <div class="section-heading">
+            <div><p class="eyebrow">À TOI DE JOUER</p><h2 id="days-heading">Les petites fenêtres</h2></div>
+            <button class="text-button" data-view="grid">Voir les 24 jours <span aria-hidden="true">→</span></button>
+          </div>
+          <div id="home-grid" class="day-grid compact-grid" aria-label="Jours du calendrier"></div>
+          <p class="legend"><span class="legend-dot open-dot"></span> À découvrir <span class="legend-dot locked-dot"></span> Bientôt disponible</p>
+        </section>
+      </section>
+
+      <section id="grid-view" class="view hidden">
+        <div class="page-heading">
+          <div><p class="eyebrow">24 JOURS DE MAGIE</p><h1>La grande grille <span>🎁</span></h1><p>Choisis une fenêtre déjà ouverte pour retrouver sa surprise.</p></div>
+          <button class="button button-red" data-view="home">← Revenir à aujourd’hui</button>
+        </div>
+        <div id="full-grid" class="day-grid full-grid" aria-label="Les 24 jours du calendrier"></div>
+        <p class="legend"><span class="legend-dot open-dot"></span> Déjà ouvert <span class="legend-dot today-dot"></span> Aujourd’hui <span class="legend-dot locked-dot"></span> Encore un peu de patience</p>
+      </section>
+
+      <section id="day-view" class="view hidden">
+        <div class="detail-top"><button class="text-button" data-view="grid">← Retour à la grille</button><button id="share-button" class="share-button">Partager <span aria-hidden="true">↗</span></button></div>
+        <article id="day-content" class="day-content"></article>
+        <div class="day-pager"><button id="previous-day" class="pager-button">← Jour précédent</button><span id="day-count"></span><button id="next-day" class="pager-button">Jour suivant →</button></div>
+      </section>
+    </main>
+
+    <footer><span>Fait avec un peu de magie <b>✦</b></span><span>Le compte à rebours de Noël a commencé !</span></footer>
+
+    <div id="drawer-backdrop" class="drawer-backdrop hidden"></div>
+    <aside id="day-drawer" class="day-drawer hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <button id="close-drawer" class="drawer-close" aria-label="Fermer">×</button>
+      <p class="eyebrow" id="drawer-date"></p>
+      <h2 id="drawer-title"></h2>
+      <p id="drawer-body"></p>
+      <div class="drawer-actions"><button id="drawer-full" class="button button-red">Lire la surprise <span aria-hidden="true">→</span></button><button id="drawer-prev" class="round-button" aria-label="Jour précédent">←</button><button id="drawer-next" class="round-button" aria-label="Jour suivant">→</button></div>
+    </aside>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
