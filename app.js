@@ -42,7 +42,8 @@ function renderGrid(target) {
     tile.type = 'button';
     tile.disabled = !available;
     tile.setAttribute('aria-label', available ? `Jour ${day}${readDays.has(day) ? ', déjà lu' : ', disponible'}` : `Jour ${day}, bientôt disponible`);
-    tile.innerHTML = `<span class="tile-number">${day}</span><span class="tile-icon" aria-hidden="true">${isToday ? '✦' : available ? (readDays.has(day) ? '✓' : '🎁') : '🔒'}</span>`;
+    const icon = isToday ? '✦' : available ? (readDays.has(day) ? '✓' : '<img class="small-gift-icon" src="gift-icon.svg" alt="">') : '🔒';
+    tile.innerHTML = `<span class="tile-number">${day}</span><span class="tile-icon" aria-hidden="true">${icon}</span>`;
     if (available) tile.addEventListener('click', () => openDay(day, target === $('#full-grid')));
     target.append(tile);
   }
