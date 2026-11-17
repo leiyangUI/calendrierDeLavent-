@@ -3,6 +3,11 @@ name: Deploy calendrier sur GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - 'index.html'
+      - 'styles.css'
+      - 'app.js'
+      - '*.svg'
   workflow_dispatch:
 
 permissions:
