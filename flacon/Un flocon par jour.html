@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Un flocon par jour</title>
+<style>
+:root{--bg:#eef4fb;--card:#dcebf8;--ink:#12263f;--muted:#566b85;--line:#b4c9e0;--acc:#2563a8;--on:#fff;--fk:#1f4f86;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1726;--card:#12263f;--ink:#e8f1fb;--muted:#93a9c3;--line:#27425f;--acc:#7db5f0;--on:#0b1726;--fk:#e8f4ff}}
+:root[data-theme="dark"]{--bg:#0b1726;--card:#12263f;--ink:#e8f1fb;--muted:#93a9c3;--line:#27425f;--acc:#7db5f0;--on:#0b1726;--fk:#e8f4ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+#app{max-width:440px;margin:0 auto;padding:16px}
+h1{font-size:34px;line-height:1.1;font-weight:700;margin:18px 0 8px;letter-spacing:-.02em}
+h2{font-size:20px;margin:6px 0;font-weight:600}
+.mut{color:var(--muted);margin:6px 0}
+.sm{font-size:13px}
+.c{text-align:center}
+.cv{min-height:82vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cvfl{width:min(72%,260px);height:auto;color:var(--fk)}
+.btn{height:52px;padding:0 28px;border:0;border-radius:14px;background:var(--acc);color:var(--on);font-weight:600;margin-top:14px}
+.ghost{height:44px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:transparent}
+.mini{min-width:36px;height:32px;border:1px solid var(--line);border-radius:8px;background:transparent}
+.bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.bar span{font-weight:600}
+.nv{height:44px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:transparent}
+.nv:last-child{justify-self:end}
+.nv:disabled{opacity:.35}
+.stage{position:relative;margin:14px 0;border-radius:22px;background:var(--card);border:1px solid var(--line);min-height:390px;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px}
+.in{position:relative;display:flex;flex-direction:column;align-items:center;width:100%}
+.day{font-size:14px;color:var(--muted);margin-bottom:6px}
+.fl{width:min(80%,280px);height:auto;color:var(--fk)}
+.ghostfl{opacity:.16}
+.pop{animation:pop .7s cubic-bezier(.2,1.3,.4,1)}
+@keyframes pop{from{transform:scale(.3) rotate(-30deg);opacity:0}to{transform:none;opacity:1}}
+.snow{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.snow i{position:absolute;top:-8px;width:6px;height:6px;border-radius:50%;background:var(--fk);opacity:.3;animation:f 8s linear infinite}
+@keyframes f{to{transform:translateY(440px)}}
+@media (prefers-reduced-motion:reduce){.snow i,.pop{animation:none}}
+.pz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;width:min(100%,300px)}
+.pz button{padding:0;border:0;background:var(--bg);border-radius:8px;overflow:hidden;display:block}
+.pz button.s{outline:3px solid var(--acc);outline-offset:-3px}
+.pz svg{display:block;width:100%;height:auto;color:var(--fk)}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:center;margin-top:12px}
+.row .btn{height:44px;margin-top:0;padding:0 18px}
+.shr{position:absolute;top:10px;right:10px;width:44px;height:44px;border:1px solid var(--line);border-radius:22px;background:var(--bg);color:var(--ink);display:flex;align-items:center;justify-content:center;z-index:2}
+.strip{display:flex;justify-content:center;gap:8px}
+.n{width:44px;height:44px;border-radius:22px;border:1px solid var(--line);background:transparent}
+.n.on{border:2px solid var(--ink);font-weight:700}
+.n.f{color:var(--muted)}
+.pull{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:48px;border:0;background:transparent;color:var(--muted)}
+.demo{font-size:13px;color:var(--muted);text-align:center;margin:10px 0 0}
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:4}
+.sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:480px;max-height:86dvh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));z-index:5}
+.grab{width:36px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 8px}
+.sh{display:flex;justify-content:space-between;align-items:center}
+.x{width:44px;height:44px;border:0;background:transparent;font-size:26px}
+.g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cell{height:62px;border:1px solid var(--line);border-radius:12px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.cell.t{border:2.5px solid var(--ink);font-weight:700}
+.cell.f{color:var(--muted)}
+.cell small{font-size:11px}
+.lg{display:flex;justify-content:space-around;gap:8px;font-size:13px;color:var(--muted);margin:12px 0 0}
+.lg span{display:flex;align-items:center;gap:4px}
+#main{user-select:none;-webkit-user-select:none}
+.d3{position:fixed;inset:0;z-index:6;background:radial-gradient(circle at 50% 38%,#24507f 0%,#0b1726 72%);color:#e8f1fb;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:env(safe-area-inset-top,0px)}
+.d3 .mut{color:#a9c1de}
+.d3 .x{color:#fff}
+.d3x{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));right:8px}
+.sc{width:min(86vw,360px);height:min(86vw,360px);perspective:900px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.ob{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.ob svg{position:absolute;inset:0;width:100%;height:100%;color:var(--fk)}
+#print{display:none}
+.pp{display:grid;grid-template-columns:1fr 1fr;gap:6mm;break-after:page}
+.pp svg{width:86mm;height:86mm;color:#000;margin:auto}
+@media print{@page{size:A4;margin:10mm}body{background:#fff}#app,#sheet,#veil{display:none!important}#print{display:block}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div id="app">
+<section id="cover">
+<div class="cv">
+<div id="cvf"></div>
+<h1>Un flocon par jour</h1>
+<p class="mut">24 jours, 24 flocons. Chacun est unique : il n’y en aura pas deux pareils.</p>
+<button class="btn" data-a="start">Commencer</button>
+<p class="mut sm">Sans inscription. À imprimer, à coller, à repasser.</p>
+</div>
+</section>
+<section id="main" hidden>
+<header class="bar"><button class="nv" id="bp" data-a="prev" aria-label="Jour précédent">‹ Précédent</button><span id="pos" aria-live="polite"></span><button class="nv" id="bn" data-a="next" aria-label="Jour suivant">Suivant ›</button></header>
+<div class="stage" id="stage"></div>
+<p class="mut sm c">Glissez à gauche ou à droite pour changer de jour, vers le haut pour voir tous les jours.</p>
+<button class="pull" data-a="sheet"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>Tous les jours</button>
+<p class="demo" id="demo"></p>
+</section>
+</div>
+<div class="veil" id="veil" data-a="close" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Tous les jours" hidden></div>
+<div class="d3" id="d3" role="dialog" aria-label="Flocon en 3D" hidden><button class="x d3x" data-a="d3close" aria-label="Fermer">×</button><div class="sc" id="sc"><div class="ob" id="ob"></div></div><p class="mut sm c">Faites-le tourner avec le doigt.</p></div>
+<div id="print"></div>
+<script>
+(function(){
+var KEY='flocons:ouverts',demo=5,view=5,opened=[],pz=null;
+function $(s){return document.querySelector(s)}
+function load(){try{var v=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(v))opened=v.filter(function(x){return x>=1&&x<=24})}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(opened))}catch(e){}}
+function isOpen(d){return opened.indexOf(d)>=0}
+function today(){if(demo!==null)return demo;var n=new Date(),m=n.getMonth();return m<11?0:Math.min(n.getDate(),24)}
+function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function fk(n){
+var r=rng(n*7919+13),R=40,d='M0 0L0 '+(-R),nb=2+Math.floor(r()*3),i,t,y,len,a,dx,dy;
+for(i=0;i<nb;i++){
+t=0.28+(i+r()*0.7)/nb*0.62;y=-R*t;len=7+r()*14;a=(30+r()*35)*Math.PI/180;dx=Math.sin(a)*len;dy=Math.cos(a)*len;
+d+='M0 '+y.toFixed(1)+'L'+dx.toFixed(1)+' '+(y-dy).toFixed(1)+'M0 '+y.toFixed(1)+'L'+(-dx).toFixed(1)+' '+(y-dy).toFixed(1);
+if(r()>0.5){var bx=dx*0.55,by=y-dy*0.55,tx=dy*0.3,ty=dx*0.3;
+d+='M'+(bx-tx).toFixed(1)+' '+(by-ty).toFixed(1)+'L'+(bx+tx).toFixed(1)+' '+(by+ty).toFixed(1)+'M'+(-bx+tx).toFixed(1)+' '+(by-ty).toFixed(1)+'L'+(-bx-tx).toFixed(1)+' '+(by+ty).toFixed(1)}}
+var tw=3+r()*6;
+if(r()>0.4){d+='M0 '+(-R*0.82).toFixed(1)+'L'+tw.toFixed(1)+' '+(-R).toFixed(1)+'M0 '+(-R*0.82).toFixed(1)+'L'+(-tw).toFixed(1)+' '+(-R).toFixed(1)}
+var ring='';
+if(r()>0.5){var p=R*(0.2+r()*0.15);ring='M';for(i=0;i<6;i++){a=(i*60-90)*Math.PI/180;ring+=(i?'L':'')+(Math.cos(a)*p).toFixed(1)+' '+(Math.sin(a)*p).toFixed(1)}ring+='Z'}
+var s='<g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">';
+for(i=0;i<6;i++)s+='<path d="'+d+'" transform="rotate('+(i*60)+')"/>';
+if(ring)s+='<path d="'+ring+'"/>';
+return s+'</g>'}
+function flakeSvg(n,cls){return '<svg class="fl '+cls+'" viewBox="-50 -50 100 100" role="img" aria-label="Flocon du jour '+n+'">'+fk(n)+'</svg>'}
+function tileSvg(n,id){var c=id%3,r=Math.floor(id/3);return '<svg viewBox="'+(-50+c*100/3).toFixed(2)+' '+(-50+r*100/3).toFixed(2)+' 33.34 33.34" aria-hidden="true">'+fk(n)+'</svg>'}
+var IC={
+check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+mail:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3.5 7.5l8.5 6 8.5-6"/>',
+share:'<path d="M12 15V4"/><path d="M8 8l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/>'};
+function icon(k,s){s=s||14;return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC[k]+'</svg>'}
+function good(){var n=0;for(var i=0;i<9;i++)if(pz.a[i]===i)n++;return n}
+function startPz(){
+var a,k;
+do{a=[0,1,2,3,4,5,6,7,8];for(k=0;k<4;k++){var x=Math.floor(Math.random()*9),y=Math.floor(Math.random()*9),t=a[x];a[x]=a[y];a[y]=t}pz={a:a,sel:-1,d:view}}while(good()>6||good()===9);
+render()}
+function openDay(){if(!isOpen(view)){opened.push(view);save()}pz=null;render()}
+function render(){
+var t=today(),h='',i;
+$('#pos').textContent=view+' / 24';
+$('#bp').disabled=view<=1;$('#bn').disabled=view>=24;
+h='<div class="snow">';for(i=0;i<10;i++)h+='<i style="left:'+(i*10+3)+'%;animation-duration:'+(6+i%4)+'s;animation-delay:-'+(i*0.9).toFixed(1)+'s"></i>';
+h+='</div><div class="in">';
+if(view>t){
+h+='<div class="day">Jour '+view+'</div>'+icon('lock',40)+'<h2>Pas encore</h2><p class="mut">Rendez-vous le '+view+' décembre.</p>'}
+else if(isOpen(view)){
+h+='<div class="day">Jour '+view+'</div>'+flakeSvg(view,'pop')+'<p class="mut">Ton flocon du jour. Il n’y en a pas deux pareils.</p><div class="row"><button class="btn" data-a="save">Enregistrer</button><button class="ghost" data-a="d3">Voir en 3D</button></div><p class="mut sm" id="note" aria-live="polite"></p>'}
+else if(pz&&pz.d===view){
+h+='<div class="day">Jour '+view+'</div><div class="pz">';
+for(i=0;i<9;i++)h+='<button data-a="tile" data-i="'+i+'" class="'+(i===pz.sel?'s':'')+'" aria-label="Pièce '+(i+1)+(i===pz.sel?', choisie':'')+'">'+tileSvg(view,pz.a[i])+'</button>';
+h+='</div><p class="mut" aria-live="polite">Touchez une pièce, puis une autre : elles échangent leur place. Bien placées : '+good()+' sur 9.</p><div class="row"><button class="ghost" data-a="again">Recommencer</button><button class="ghost" data-a="show">Montrer la solution</button></div>'}
+else{
+h+='<div class="day">Jour '+view+'</div>'+flakeSvg(view,'ghostfl')+'<p class="mut">Un flocon t’attend. Personne ne sait encore à quoi il ressemble.</p><button class="btn" data-a="go">Ouvrir la case</button>'}
+h+='</div>';
+if(view<=t&&isOpen(view))h+='<button class="shr" data-a="share" aria-label="Partager">'+icon('share',22)+'</button>';
+$('#stage').innerHTML=h;
+$('#demo').innerHTML='Mode essai · jour simulé : <button class="mini" data-a="dm" aria-label="Jour simulé précédent">−</button> <b>'+(demo===null?'date réelle ('+t+')':demo)+'</b> <button class="mini" data-a="dp" aria-label="Jour simulé suivant">+</button> <button class="mini" data-a="real">Date réelle</button>'}
+function cell(d,t){
+var cls='cell'+(d===t?' t':'')+(d>t?' f':''),ic=d>t?'lock':(isOpen(d)?'check':'mail');
+return '<button class="'+cls+'" data-a="cell" data-i="'+d+'" aria-label="Jour '+d+(d>t?', pas encore':(isOpen(d)?', ouvert':', à ouvrir'))+'"><span>'+d+'</span>'+icon(ic)+(d===t?'<small>auj.</small>':'')+'</button>'}
+function openSheet(){
+var t=today(),h='<div class="grab"></div><div class="sh"><h2>Tous les jours</h2><button class="x" data-a="close" aria-label="Fermer">×</button></div><div class="g">',d;
+for(d=1;d<=24;d++)h+=cell(d,t);
+h+='</div><p class="lg"><span>'+icon('check')+' ouvert</span><span>'+icon('mail')+' à ouvrir</span><span>'+icon('lock')+' pas encore</span></p>';
+$('#sheet').innerHTML=h;$('#sheet').hidden=false;$('#veil').hidden=false}
+function closeSheet(){$('#sheet').hidden=true;$('#veil').hidden=true}
+function go(n){view=Math.max(1,Math.min(24,n));pz=null;render()}
+function doPrint(){
+var list=opened.slice().sort(function(a,b){return a-b}),h='',i;
+for(i=0;i<list.length;i+=6){h+='<div class="pp">';list.slice(i,i+6).forEach(function(d){h+='<svg viewBox="-50 -50 100 100" aria-hidden="true"><circle r="48" fill="none" stroke="#999" stroke-width=".5" stroke-dasharray="2 2"/>'+fk(d)+'</svg>'});h+='</div>'}
+$('#print').innerHTML=h;
+try{window.print()}catch(e){}}
+function note(t){var n=$('#note');if(n)n.textContent=t}
+function pngBlob(d,cb){
+var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100" width="1200" height="1200"><rect x="-50" y="-50" width="100" height="100" fill="#fff"/><circle r="48" fill="none" stroke="#999" stroke-width=".5" stroke-dasharray="2 2"/>'+fk(d).replace(/currentColor/g,'#000')+'</svg>';
+var img=new Image();
+img.onload=function(){var c=document.createElement('canvas');c.width=1200;c.height=1200;c.getContext('2d').drawImage(img,0,0,1200,1200);c.toBlob(function(b){cb(b)},'image/png')};
+img.onerror=function(){cb(null)};
+img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
+function saveImg(){
+var d=view;
+pngBlob(d,function(b){
+if(!b){note('Impossible de préparer l’image.');return}
+if(!window.claude||!window.claude.use){note('L’enregistrement n’est pas disponible ici.');return}
+window.claude.use('downloads').then(function(dl){
+if(!dl){note('L’enregistrement n’est pas disponible ici.');return}
+dl.save({filename:'flocon-jour-'+d+'.png',data:b}).then(function(){note('Flocon enregistré.')},function(e){note(e&&e.code==='declined'?'Enregistrement annulé.':'L’enregistrement n’est pas disponible ici.')})})})}
+function shareImg(){
+var d=view;
+pngBlob(d,function(b){
+if(!navigator.share){note('Le partage n’est pas disponible ici. Utilisez Enregistrer.');return}
+var f=b&&typeof File==='function'?new File([b],'flocon-jour-'+d+'.png',{type:'image/png'}):null;
+var data=f&&navigator.canShare&&navigator.canShare({files:[f]})?{files:[f],title:'Mon flocon du jour '+d}:{title:'Un flocon par jour',url:location.href};
+navigator.share(data).catch(function(e){if(!e||e.name!=='AbortError')note('Le partage n’est pas disponible ici. Utilisez Enregistrer.')})})}
+var raf=0,rx=-18,ry=0,drag=false,lx=0,ly=0;
+function spin(){if(!drag&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)ry+=0.5;$('#ob').style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';raf=requestAnimationFrame(spin)}
+var T=null;
+function build3d(){
+var host=$('#sc'),old=host.querySelector('canvas');
+if(old)host.removeChild(old);
+$('#ob').innerHTML='';
+if(T){T.r.dispose();T=null}
+var w=host.clientWidth||320,r=new THREE.WebGLRenderer({antialias:true,alpha:true});
+r.setPixelRatio(Math.min(window.devicePixelRatio||1,2));r.setSize(w,w);
+r.domElement.style.cssText='position:absolute;inset:0;width:100%;height:100%;touch-action:none';
+host.appendChild(r.domElement);
+var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,0.1,20);cam.position.set(0,0,4.6);
+sc.add(new THREE.AmbientLight(0x9fb8d8,0.9));
+var l1=new THREE.DirectionalLight(0xffffff,1.1);l1.position.set(2,3,4);sc.add(l1);
+var l2=new THREE.DirectionalLight(0x6fa8ff,0.9);l2.position.set(-3,-2,2);sc.add(l2);
+var l3=new THREE.PointLight(0xffffff,0.8,10);l3.position.set(0,0,3);sc.add(l3);
+var g=new THREE.Group();sc.add(g);
+var m=new THREE.MeshPhongMaterial({color:0xcfe6ff,specular:0xffffff,shininess:120,emissive:0x1d3b66,emissiveIntensity:0.35});
+var mk=fk(view),re=/<path d="([^"]+)"(?: transform="rotate\((\d+)\)")?\/>/g,mt,rad=0.04,up=new THREE.Vector3(0,1,0);
+function beam(a,b){var d=new THREE.Vector3().subVectors(b,a),len=d.length();if(len<0.001)return;var c=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,len,10),m);c.position.copy(a).add(b).multiplyScalar(0.5);c.quaternion.setFromUnitVectors(up,d.normalize());g.add(c)}
+function ball(p){var s=new THREE.Mesh(new THREE.SphereGeometry(rad,12,10),m);s.position.copy(p);g.add(s)}
+while((mt=re.exec(mk))){
+var ang=(mt[2]?parseInt(mt[2],10):0)*Math.PI/180,ca=Math.cos(ang),sa=Math.sin(ang),cur=null,first=null,toks=mt[1].match(/[MLZ]|-?\d+\.?\d*/g),i=0;
+while(i<toks.length){
+var t=toks[i];
+if(t==='M'||t==='L'){
+var x=parseFloat(toks[i+1]),y=parseFloat(toks[i+2]);i+=3;
+var p=new THREE.Vector3((x*ca-y*sa)/40,-(x*sa+y*ca)/40,0);
+if(t==='M'){cur=p;first=p;ball(p)}else{beam(cur,p);ball(p);cur=p}}
+else if(t==='Z'){i++;if(cur&&first)beam(cur,first)}
+else i++}}
+T={r:r,sc:sc,cam:cam,g:g}}
+function spin3(){
+if(!T)return;
+if(!drag&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)ry+=0.5;
+T.g.rotation.set(rx*Math.PI/180,ry*Math.PI/180,0);
+T.r.render(T.sc,T.cam);
+raf=requestAnimationFrame(spin3)}
+function open3d(){
+$('#d3').hidden=false;rx=-18;ry=0;cancelAnimationFrame(raf);
+if(window.THREE){try{build3d();spin3();return}catch(e){}}
+old3d()}
+function old3d(){
+var h='',k;
+for(k=-4;k<=4;k++)h+='<svg viewBox="-50 -50 100 100" aria-hidden="true" style="transform:translateZ('+(k*7)+'px);opacity:'+(1-Math.abs(k)*0.09).toFixed(2)+'">'+fk(view)+'</svg>';
+$('#ob').innerHTML=h;$('#d3').hidden=false;rx=-18;ry=0;cancelAnimationFrame(raf);spin()}
+function close3d(){cancelAnimationFrame(raf);$('#d3').hidden=true}
+function start(){$('#cover').hidden=true;$('#main').hidden=false;render()}
+document.addEventListener('click',function(e){
+var b=e.target.closest('[data-a]');if(!b)return;
+var a=b.getAttribute('data-a'),i=parseInt(b.getAttribute('data-i'),10),t=today();
+if(a==='start')start();
+else if(a==='prev')go(view-1);
+else if(a==='next')go(view+1);
+else if(a==='day')go(i);
+else if(a==='go')startPz();
+else if(a==='again')startPz();
+else if(a==='show')openDay();
+else if(a==='tile'){
+if(pz.sel<0)pz.sel=i;
+else if(pz.sel===i)pz.sel=-1;
+else{var x=pz.a[pz.sel];pz.a[pz.sel]=pz.a[i];pz.a[i]=x;pz.sel=-1}
+if(good()===9)openDay();else render()}
+else if(a==='save')saveImg();
+else if(a==='share')shareImg();
+else if(a==='d3')open3d();
+else if(a==='d3close')close3d();
+else if(a==='sheet')openSheet();
+else if(a==='close')closeSheet();
+else if(a==='cell'){closeSheet();go(i)}
+else if(a==='dm'){demo=Math.max(0,(demo===null?t:demo)-1);render()}
+else if(a==='dp'){demo=Math.min(24,(demo===null?t:demo)+1);render()}
+else if(a==='real'){demo=null;render()}});
+var sx=0,sy=0,sc0=0,sw=false;
+function swipe(dx,dy){
+if(Math.abs(dx)>60&&Math.abs(dy)<60)go(dx<0?view+1:view-1);
+else if(dy<-60&&Math.abs(dx)<60&&Math.abs(window.pageYOffset-sc0)<5)openSheet()}
+var mn=$('#main'),sh=$('#sheet'),shy=0,s3=$('#sc');
+mn.addEventListener('touchstart',function(e){sx=e.changedTouches[0].clientX;sy=e.changedTouches[0].clientY;sc0=window.pageYOffset},{passive:true});
+mn.addEventListener('touchend',function(e){swipe(e.changedTouches[0].clientX-sx,e.changedTouches[0].clientY-sy)},{passive:true});
+mn.addEventListener('mousedown',function(e){sx=e.clientX;sy=e.clientY;sc0=window.pageYOffset;sw=true});
+document.addEventListener('mouseup',function(e){if(sw){sw=false;swipe(e.clientX-sx,e.clientY-sy)}});
+sh.addEventListener('touchstart',function(e){shy=e.changedTouches[0].clientY},{passive:true});
+sh.addEventListener('touchend',function(e){if(e.changedTouches[0].clientY-shy>70&&sh.scrollTop===0)closeSheet()},{passive:true});
+s3.addEventListener('pointerdown',function(e){drag=true;lx=e.clientX;ly=e.clientY;s3.setPointerCapture(e.pointerId)});
+s3.addEventListener('pointermove',function(e){if(!drag)return;ry+=(e.clientX-lx)*0.6;rx=Math.max(-80,Math.min(80,rx-(e.clientY-ly)*0.6));lx=e.clientX;ly=e.clientY});
+s3.addEventListener('pointerup',function(){drag=false});
+s3.addEventListener('pointercancel',function(){drag=false});
+document.addEventListener('keydown',function(e){
+if(e.key==='Escape'){closeSheet();close3d()}
+else if($('#main').hidden===false&&$('#sheet').hidden&&$('#d3').hidden){if(e.key==='ArrowLeft')go(view-1);else if(e.key==='ArrowRight')go(view+1);else if(e.key==='ArrowUp')openSheet()}
+else if(e.key==='ArrowDown')closeSheet()});
+load();
+view=Math.min(24,Math.max(1,today()));
+$('#cvf').innerHTML=flakeSvg(12,'cvfl');
+if(opened.length>0)start();
+})();
+</script>
+</body>
+</html>
