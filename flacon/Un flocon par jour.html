@@ -20,7 +20,11 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 .mut{color:var(--muted);margin:6px 0}
 .sm{font-size:13px}
 .c{text-align:center}
-.cv{min-height:82vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cv{position:relative;min-height:82vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.cv>*:not(.cover-snow){position:relative;z-index:1}
+.cover-snow{z-index:0;opacity:.55}
+.cover-snow i{width:7px;height:7px;opacity:.45}
+.cover-snow i:nth-child(1){left:5%;animation-delay:-1s;animation-duration:9s}.cover-snow i:nth-child(2){left:13%;animation-delay:-6s;animation-duration:7s}.cover-snow i:nth-child(3){left:22%;animation-delay:-3s;animation-duration:11s}.cover-snow i:nth-child(4){left:31%;animation-delay:-8s;animation-duration:8s}.cover-snow i:nth-child(5){left:40%;animation-delay:-2s;animation-duration:10s}.cover-snow i:nth-child(6){left:49%;animation-delay:-7s;animation-duration:7s}.cover-snow i:nth-child(7){left:58%;animation-delay:-4s;animation-duration:12s}.cover-snow i:nth-child(8){left:67%;animation-delay:-9s;animation-duration:9s}.cover-snow i:nth-child(9){left:76%;animation-delay:-5s;animation-duration:8s}.cover-snow i:nth-child(10){left:85%;animation-delay:-2s;animation-duration:10s}.cover-snow i:nth-child(11){left:94%;animation-delay:-7s;animation-duration:11s}
 .cvfl{width:min(72%,260px);height:auto;color:var(--fk)}
 .btn{height:52px;padding:0 28px;border:0;border-radius:14px;background:var(--acc);color:var(--on);font-weight:600;margin-top:14px}
 .ghost{height:44px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:transparent}
@@ -54,6 +58,13 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 .n.f{color:var(--muted)}
 .pull{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:48px;border:0;background:transparent;color:var(--muted)}
 .demo{font-size:13px;color:var(--muted);text-align:center;margin:10px 0 0}
+.song-card{margin:18px 0 12px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:left}
+.song-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.song-head h2{font-size:16px;margin:0}
+.song-button{min-height:40px;padding:0 14px;border:0;border-radius:12px;background:var(--acc);color:var(--on);font-weight:650}
+.song-lines{display:grid;gap:4px;margin:10px 0 0;padding:0;list-style:none;color:var(--muted);font-size:14px}
+.song-lines li{padding:4px 8px;border-radius:8px}
+.song-lines li.active{background:var(--bg);color:var(--ink);font-weight:700}
 .veil{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:4}
 .sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:480px;max-height:86dvh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));z-index:5}
 .grab{width:36px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 8px}
@@ -75,6 +86,8 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 .d3{position:fixed;inset:0;z-index:6;background:radial-gradient(circle at 50% 38%,var(--d3-glow,#24507f) 0%,var(--d3-bg,#0b1726) 72%);color:var(--d3-text,#e8f1fb);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:env(safe-area-inset-top,0px)}
 .d3 .mut{color:var(--d3-muted,#a9c1de)}
 .d3 .x{color:var(--d3-text,#fff)}
+.d3-grab{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:calc(50% - 27px);width:54px;height:20px;display:grid;place-items:center}
+.d3-grab span{width:38px;height:5px;border-radius:5px;background:currentColor;opacity:.45}
 .d3x{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));right:8px}
 .sc{width:min(86vw,360px);height:min(86vw,360px);perspective:900px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
 .ob{position:relative;width:100%;height:100%;transform-style:preserve-3d}
@@ -90,6 +103,7 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 <div id="app">
 <section id="cover">
 <div class="cv">
+<div class="snow cover-snow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <div id="cvf"></div>
 <h1>Un flocon par jour</h1>
 <p class="mut">24 jours, 24 flocons. Chacun est unique : il n’y en aura pas deux pareils.</p>
@@ -103,15 +117,22 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 <p class="mut sm c">Glissez à gauche ou à droite pour changer de jour, vers le haut pour voir tous les jours.</p>
 <button class="pull" data-a="sheet"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>Tous les jours</button>
 <p class="demo" id="demo"></p>
+<section class="song-card" aria-label="Chanson des flocons">
+  <div class="song-head"><h2>La chanson des flocons</h2><button id="song-toggle" class="song-button" type="button" data-a="song">♫ Écouter</button></div>
+  <ol id="song-lines" class="song-lines" aria-live="polite">
+    <li>Petit flocon, viens danser,</li><li>Dans le ciel étoilé.</li><li>Tourne, tourne, sans t’arrêter,</li><li>Noël va bientôt briller.</li>
+  </ol>
+</section>
 </section>
 </div>
 <div class="veil" id="veil" data-a="close" hidden></div>
 <div class="sheet" id="sheet" role="dialog" aria-label="Tous les jours" hidden></div>
-<div class="d3" id="d3" role="dialog" aria-label="Flocon en 3D" hidden><button class="x d3x" data-a="d3close" aria-label="Fermer">×</button><div class="sc" id="sc"><div class="ob" id="ob"></div></div><p class="mut sm c">Faites-le tourner avec le doigt.</p></div>
+<div class="d3" id="d3" role="dialog" aria-label="Flocon en 3D" hidden><div class="d3-grab" aria-hidden="true"><span></span></div><button class="x d3x" data-a="d3close" aria-label="Fermer">×</button><div class="sc" id="sc"><div class="ob" id="ob"></div></div><p class="mut sm c">Faites-le tourner avec le doigt.</p><p class="mut sm c">Glissez vers le bas pour fermer.</p></div>
 <div id="print"></div>
 <script>
 (function(){
-var KEY='flocons:ouverts',demo=5,view=5,opened=[],pz=null,gender='boy';
+var KEY='flocons:ouverts',demo=5,view=5,opened=[],pz=null,gender='boy',songTimer=null,songContext=null,songIndex=0,d3Start=null;
+var songNotes=[392,392,440,392,523,494,440,392,440,440,494,440,587,523,494,440,523,523,587,523,659,587,523,494,392,440,494,523,494,440,392,392];
 window.addEventListener('message',function(e){
 if(!e.data||e.data.type!=='flacon-version')return;
 gender=e.data.mode==='girl'?'girl':'boy';
@@ -127,6 +148,27 @@ function $(s){return document.querySelector(s)}
 function load(){try{var v=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(v))opened=v.filter(function(x){return x>=1&&x<=24})}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(opened))}catch(e){}}
 function isOpen(d){return opened.indexOf(d)>=0}
+function stopSong(){
+if(songTimer){clearTimeout(songTimer);songTimer=null}
+if(songContext){try{songContext.close()}catch(e){}songContext=null}
+document.querySelectorAll('#song-lines li').forEach(function(line){line.classList.remove('active')});
+var b=$('#song-toggle');if(b)b.textContent='♫ Écouter';
+}
+function playSongNote(){
+if(songIndex>=songNotes.length){stopSong();return}
+var line=Math.floor(songIndex/8),lines=document.querySelectorAll('#song-lines li');
+lines.forEach(function(el,i){el.classList.toggle('active',i===line)});
+var osc=songContext.createOscillator(),gain=songContext.createGain(),now=songContext.currentTime;
+osc.type='sine';osc.frequency.value=songNotes[songIndex];gain.gain.setValueAtTime(0.0001,now);gain.gain.exponentialRampToValueAtTime(0.12,now+0.035);gain.gain.exponentialRampToValueAtTime(0.0001,now+0.24);
+osc.connect(gain);gain.connect(songContext.destination);osc.start(now);osc.stop(now+0.25);
+songIndex+=1;songTimer=setTimeout(playSongNote,320);
+}
+function toggleSong(){
+if(songTimer){stopSong();return}
+var Audio=window.AudioContext||window.webkitAudioContext;
+if(!Audio){var b=$('#song-toggle');b.textContent='Son indisponible';return}
+songContext=new Audio();songContext.resume();songIndex=0;$('#song-toggle').textContent='Ⅱ Arrêter';playSongNote();
+}
 function today(){if(demo!==null)return demo;var n=new Date(),m=n.getMonth();return m<11?0:Math.min(n.getDate(),24)}
 function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function fk(n){
@@ -282,6 +324,7 @@ else{var x=pz.a[pz.sel];pz.a[pz.sel]=pz.a[i];pz.a[i]=x;pz.sel=-1}
 if(good()===9)openDay();else render()}
 else if(a==='save')saveImg();
 else if(a==='share')shareImg();
+else if(a==='song')toggleSong();
 else if(a==='d3')open3d();
 else if(a==='d3close')close3d();
 else if(a==='sheet')openSheet();
@@ -294,7 +337,7 @@ var sx=0,sy=0,sc0=0,sw=false;
 function swipe(dx,dy){
 if(Math.abs(dx)>60&&Math.abs(dy)<60)go(dx<0?view+1:view-1);
 else if(dy<-60&&Math.abs(dx)<60&&Math.abs(window.pageYOffset-sc0)<5)openSheet()}
-var mn=$('#main'),sh=$('#sheet'),shy=0,s3=$('#sc');
+var mn=$('#main'),sh=$('#sheet'),shy=0,s3=$('#sc'),d3=$('#d3');
 mn.addEventListener('touchstart',function(e){sx=e.changedTouches[0].clientX;sy=e.changedTouches[0].clientY;sc0=window.pageYOffset},{passive:true});
 mn.addEventListener('touchend',function(e){swipe(e.changedTouches[0].clientX-sx,e.changedTouches[0].clientY-sy)},{passive:true});
 mn.addEventListener('mousedown',function(e){sx=e.clientX;sy=e.clientY;sc0=window.pageYOffset;sw=true});
@@ -305,6 +348,9 @@ s3.addEventListener('pointerdown',function(e){drag=true;lx=e.clientX;ly=e.client
 s3.addEventListener('pointermove',function(e){if(!drag)return;ry+=(e.clientX-lx)*0.6;rx=Math.max(-80,Math.min(80,rx-(e.clientY-ly)*0.6));lx=e.clientX;ly=e.clientY});
 s3.addEventListener('pointerup',function(){drag=false});
 s3.addEventListener('pointercancel',function(){drag=false});
+d3.addEventListener('pointerdown',function(e){if(e.pointerType==='touch')d3Start={x:e.clientX,y:e.clientY}});
+d3.addEventListener('pointerup',function(e){if(d3Start&&e.clientY-d3Start.y>85&&Math.abs(e.clientX-d3Start.x)<100)close3d();d3Start=null});
+d3.addEventListener('pointercancel',function(){d3Start=null});
 document.addEventListener('keydown',function(e){
 if(e.key==='Escape'){closeSheet();close3d()}
 else if($('#main').hidden===false&&$('#sheet').hidden&&$('#d3').hidden){if(e.key==='ArrowLeft')go(view-1);else if(e.key==='ArrowRight')go(view+1);else if(e.key==='ArrowUp')openSheet()}
