@@ -14,7 +14,7 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-#app{max-width:440px;margin:0 auto;padding:16px}
+#app{max-width:440px;margin:0 auto;padding:66px 16px 16px}
 h1{font-size:34px;line-height:1.1;font-weight:700;margin:18px 0 8px;letter-spacing:-.02em}
 h2{font-size:20px;margin:6px 0;font-weight:600}
 .mut{color:var(--muted);margin:6px 0}
@@ -251,14 +251,14 @@ T.g.rotation.set(rx*Math.PI/180,ry*Math.PI/180,0);
 T.r.render(T.sc,T.cam);
 raf=requestAnimationFrame(spin3)}
 function open3d(){
-$('#d3').hidden=false;rx=-18;ry=0;cancelAnimationFrame(raf);
+$('#d3').hidden=false;parent.postMessage({type:'flacon-3d',open:true},'*');rx=-18;ry=0;cancelAnimationFrame(raf);
 if(window.THREE){try{build3d();spin3();return}catch(e){}}
 old3d()}
 function old3d(){
 var h='',k;
 for(k=-4;k<=4;k++)h+='<svg viewBox="-50 -50 100 100" aria-hidden="true" style="transform:translateZ('+(k*7)+'px);opacity:'+(1-Math.abs(k)*0.09).toFixed(2)+'">'+fk(view)+'</svg>';
 $('#ob').innerHTML=h;$('#d3').hidden=false;rx=-18;ry=0;cancelAnimationFrame(raf);spin()}
-function close3d(){cancelAnimationFrame(raf);$('#d3').hidden=true}
+function close3d(){cancelAnimationFrame(raf);$('#d3').hidden=true;parent.postMessage({type:'flacon-3d',open:false},'*')}
 function start(){$('#cover').hidden=true;$('#main').hidden=false;render()}
 document.addEventListener('click',function(e){
 var b=e.target.closest('[data-a]');if(!b)return;

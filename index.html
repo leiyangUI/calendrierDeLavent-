@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#fff2d8" />
   <title>Un flocon par jour</title>
   <style>
-    *{box-sizing:border-box}body{margin:0;min-width:320px;background:transparent;color:#12263f;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;--switch-text:#566b85;--switch-active:#1f4f86;--focus:#2563a8}.top{height:50px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px max(12px,calc((100vw - 420px)/2));background:transparent}.brand{display:flex;align-items:center;gap:7px;font-weight:800;font-size:16px;white-space:nowrap}.brand-mark{font-size:24px;line-height:1}.switch{display:flex;gap:2px;padding:0;border:0;border-radius:0;background:transparent}.switch button{border:0;border-radius:999px;padding:7px 12px;background:transparent;color:var(--switch-text);font:inherit;font-size:13px;font-weight:750;cursor:pointer}.switch button[aria-pressed="true"]{background:rgba(255,255,255,.74);box-shadow:0 1px 5px #12263f18;color:var(--switch-active)}.switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}body[data-mode="girl"]{color:#493b3b;--switch-text:#817575;--switch-active:#c92f42;--focus:#c92f42}.switch button[aria-pressed="true"]{color:var(--switch-active)}iframe{display:block;width:100%;height:calc(100dvh - 50px);border:0;background:#eef4fb}body[data-mode="girl"] iframe{background:#fff2d8}@media(max-width:420px){.top{padding-inline:10px}.brand{font-size:14px}.brand-mark{font-size:22px}.switch button{padding:7px 9px;font-size:12px}}
+    *{box-sizing:border-box}body{margin:0;min-width:320px;background:transparent;color:#12263f;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;--switch-text:#566b85;--switch-active:#1f4f86;--focus:#2563a8}.top{position:fixed;z-index:20;top:0;left:0;right:0;height:50px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px max(12px,calc((100vw - 420px)/2));background:transparent!important}.brand{display:flex;align-items:center;gap:7px;font-weight:800;font-size:16px;white-space:nowrap}.brand-mark{font-size:24px;line-height:1}.switch{display:flex;gap:2px;padding:0;border:0;border-radius:0;background:transparent!important}.switch button{border:0;border-radius:0;padding:7px 12px;background:transparent!important;box-shadow:none!important;color:var(--switch-text);font:inherit;font-size:13px;font-weight:750;cursor:pointer}.switch button[aria-pressed="true"]{color:var(--switch-active);box-shadow:inset 0 -2px currentColor!important}.switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}body[data-mode="girl"]{color:#493b3b;--switch-text:#817575;--switch-active:#c92f42;--focus:#c92f42}iframe{position:fixed;inset:0;display:block;width:100%;height:100dvh;border:0;background:#eef4fb}body[data-mode="girl"] iframe{background:#fff2d8}.top.is-hidden{opacity:0;pointer-events:none}@media(max-width:420px){.top{padding-inline:10px}.brand{font-size:14px}.brand-mark{font-size:22px}.switch button{padding:7px 9px;font-size:12px}}
   </style>
 </head>
 <body>
@@ -28,6 +28,11 @@
       frame.contentWindow.postMessage({type:'flacon-version', mode}, '*');
     }
     buttons.forEach(button => button.addEventListener('click', () => { mode = button.dataset.mode; localStorage.setItem('flacon-version', mode); paint(); }));
+    window.addEventListener('message', event => {
+      if (event.source === frame.contentWindow && event.data && event.data.type === 'flacon-3d') {
+        document.querySelector('.top').classList.toggle('is-hidden', event.data.open);
+      }
+    });
     frame.addEventListener('load', paint);
   </script>
 </body>
