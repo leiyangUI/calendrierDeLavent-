@@ -107,6 +107,16 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 <script>
 (function(){
 var KEY='flocons:ouverts',demo=5,view=5,opened=[],pz=null;
+window.addEventListener('message',function(e){
+if(!e.data||e.data.type!=='flacon-version')return;
+var old=document.getElementById('gender-theme');if(old)old.remove();
+document.documentElement.dataset.theme='light';
+if(e.data.mode==='girl'){
+var theme=document.createElement('style');theme.id='gender-theme';
+theme.textContent=':root{--bg:#fff2d8!important;--card:#fffdf8!important;--ink:#493b3b!important;--muted:#817575!important;--line:#eadbc7!important;--acc:#f04452!important;--on:#fff!important;--fk:#c92f42!important}';
+document.head.appendChild(theme);
+}
+});
 function $(s){return document.querySelector(s)}
 function load(){try{var v=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(v))opened=v.filter(function(x){return x>=1&&x<=24})}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(opened))}catch(e){}}

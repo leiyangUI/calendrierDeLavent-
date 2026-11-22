@@ -6,12 +6,12 @@
   <meta name="theme-color" content="#fff2d8" />
   <title>Un flocon par jour</title>
   <style>
-    *{box-sizing:border-box}body{margin:0;min-width:320px;background:#fff2d8;color:#493b3b;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}.top{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px max(16px,calc((100vw - 760px)/2));background:#fffdf8;border-bottom:1px solid #eadbc7}.brand{font-weight:750}.switch{display:flex;gap:4px;padding:4px;border:1px solid #eadbc7;border-radius:999px;background:#fff2d8}.switch button{border:0;border-radius:999px;padding:9px 14px;background:transparent;color:#817575;font:inherit;font-weight:700;cursor:pointer}.switch button[aria-pressed="true"]{background:#fff;box-shadow:0 2px 8px #493b3b1a;color:#c92f42}.switch button:focus-visible{outline:3px solid #493b3b;outline-offset:2px}iframe{display:block;width:100%;height:calc(100dvh - 64px);border:0;background:#fff2d8}@media(max-width:420px){.top{padding-inline:12px}.switch button{padding:8px 10px;font-size:13px}}
+    *{box-sizing:border-box}body{margin:0;min-width:320px;background:#eef4fb;color:#12263f;font:15px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}.top{height:50px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px max(12px,calc((100vw - 420px)/2));background:transparent}.brand{display:flex;align-items:center;gap:7px;font-weight:800;font-size:16px;white-space:nowrap}.brand-mark{font-size:24px;line-height:1}.switch{display:flex;gap:3px;padding:3px;border:1px solid #b4c9e0;border-radius:999px;background:#dcebf8}.switch button{border:0;border-radius:999px;padding:7px 12px;background:transparent;color:#566b85;font:inherit;font-size:13px;font-weight:750;cursor:pointer}.switch button[aria-pressed="true"]{background:#fff;box-shadow:0 2px 7px #12263f24;color:#1f4f86}.switch button:focus-visible{outline:3px solid #2563a8;outline-offset:2px}iframe{display:block;width:100%;height:calc(100dvh - 50px);border:0;background:#eef4fb}@media(max-width:420px){.top{padding-inline:10px}.brand{font-size:14px}.brand-mark{font-size:22px}.switch button{padding:7px 9px;font-size:12px}}
   </style>
 </head>
 <body>
   <header class="top">
-    <div class="brand">❄ Un flocon par jour</div>
+    <div class="brand"><span class="brand-mark" aria-hidden="true">❄</span> Un flocon par jour</div>
     <div class="switch" role="group" aria-label="Choisir une version">
       <button type="button" data-mode="boy" aria-pressed="true">Garçon</button>
       <button type="button" data-mode="girl" aria-pressed="false">Fille</button>
@@ -21,21 +21,12 @@
   <script>
     const frame = document.querySelector('#game');
     const buttons = [...document.querySelectorAll('[data-mode]')];
-    let mode = 'boy';
+    let mode = localStorage.getItem('flacon-version') || 'boy';
     function paint() {
       buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
-      try {
-        const root = frame.contentDocument.documentElement;
-        if (mode === 'girl') {
-          root.dataset.theme = 'light';
-          Object.assign(root.style, {'--bg':'#fff2d8','--card':'#fffdf8','--ink':'#493b3b','--muted':'#817575','--line':'#eadbc7','--acc':'#f04452','--on':'#fff','--fk':'#c92f42'});
-        } else {
-          root.dataset.theme = 'light';
-          ['--bg','--card','--ink','--muted','--line','--acc','--on','--fk'].forEach(name => root.style.removeProperty(name));
-        }
-      } catch (_) {}
+      frame.contentWindow.postMessage({type:'flacon-version', mode}, '*');
     }
-    buttons.forEach(button => button.addEventListener('click', () => { mode = button.dataset.mode; paint(); }));
+    buttons.forEach(button => button.addEventListener('click', () => { mode = button.dataset.mode; localStorage.setItem('flacon-version', mode); paint(); }));
     frame.addEventListener('load', paint);
   </script>
 </body>
