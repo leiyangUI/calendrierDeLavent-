@@ -57,7 +57,6 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 .n.on{border:2px solid var(--ink);font-weight:700}
 .n.f{color:var(--muted)}
 .pull{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:48px;border:0;background:transparent;color:var(--muted)}
-.demo{font-size:13px;color:var(--muted);text-align:center;margin:10px 0 0}
 .veil{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:4}
 .sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:480px;max-height:86dvh;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));z-index:5}
 .grab{width:36px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 8px}
@@ -90,9 +89,8 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 @keyframes d3fall{to{transform:translate3d(var(--sway,22px),110dvh,0) rotate(120deg)}}
 @keyframes twinkle{from{opacity:.18;transform:scale(.65)}to{opacity:1;transform:scale(1.2)}}
 .sc{position:relative;z-index:1;width:min(76vw,330px);height:min(76vw,330px);perspective:900px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
-.d3-music{position:absolute;z-index:4;left:20px;right:20px;bottom:calc(22px + env(safe-area-inset-bottom,0px));max-width:420px;margin:auto;text-align:center}
+.d3-music{position:absolute;z-index:4;left:20px;right:20px;bottom:calc(22px + env(safe-area-inset-bottom,0px));max-width:420px;margin:auto;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
 .track-name{margin:0;color:var(--d3-text,#fff);font-size:16px;font-weight:750}
-.track-credit{display:block;margin-top:2px;color:var(--d3-muted,#a9c1de);font-size:10px;text-decoration:underline;text-underline-offset:2px}
 .lyrics{display:grid;gap:2px;margin:10px 0;color:var(--d3-muted,#a9c1de);font-size:12px}
 .lyrics span{transition:color .15s,transform .15s}
 .lyrics span.active{color:var(--d3-text,#fff);font-size:15px;font-weight:750;transform:scale(1.02)}
@@ -101,6 +99,14 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 .music-progress{height:3px;flex:1;border-radius:4px;background:#ffffff50;overflow:hidden}
 .music-progress span{display:block;height:100%;width:0;background:var(--d3-text,#fff);transition:width .12s linear}
 .music-time{min-width:64px;text-align:right;font-size:10px;color:var(--d3-muted,#a9c1de)}
+.d3-tutorial{position:absolute;z-index:4;top:calc(52px + env(safe-area-inset-top,0px));left:18px;right:18px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--d3-text,#fff);font-size:12px;text-align:center;animation:tipIn .25s ease-out}
+.d3-tutorial[hidden]{display:none}
+.tutorial-step{display:flex;align-items:center;gap:7px}
+.tutorial-step b{width:19px;height:19px;display:grid;place-items:center;border-radius:50%;background:var(--d3-text,#fff);color:var(--d3-bg,#0b1726);font-size:11px}
+.tutorial-arrow{font-size:21px;line-height:1;animation:tipBounce .55s ease-in-out infinite alternate}
+@keyframes tipBounce{to{transform:translateY(7px)}}
+@keyframes tipIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.tutorial-arrow,.d3-snow i,.d3-snow b{animation:none}}
 .ob{position:relative;width:100%;height:100%;transform-style:preserve-3d}
 .ob svg{position:absolute;inset:0;width:100%;height:100%;color:var(--fk)}
 #print{display:none}
@@ -127,7 +133,6 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 <div class="stage" id="stage"></div>
 <p class="mut sm c">Glissez à gauche ou à droite pour changer de jour, vers le haut pour voir tous les jours.</p>
 <button class="pull" data-a="sheet"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>Tous les jours</button>
-<p class="demo" id="demo"></p>
 </section>
 </div>
 <div class="veil" id="veil" data-a="close" hidden></div>
@@ -135,11 +140,11 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 <div class="d3" id="d3" role="dialog" aria-label="Flocon en 3D" hidden>
 <div class="d3-snow d3-snow-back" id="snow-back" aria-hidden="true"></div>
 <div class="d3-grab" aria-hidden="true"><span></span></div><button class="x d3x" data-a="d3close" aria-label="Fermer">×</button>
+<div class="d3-tutorial" id="gesture-tip" hidden><div class="tutorial-step"><b>1</b> Faites glisser le flocon pour le tourner</div><div class="tutorial-step"><b>2</b> Glissez vers le bas pour fermer</div><span class="tutorial-arrow" aria-hidden="true">⌄</span></div>
 <div class="sc" id="sc"><div class="ob" id="ob"></div></div>
 <div class="d3-snow d3-snow-front" id="snow-front" aria-hidden="true"></div>
 <div class="d3-music">
   <p class="track-name">Frère Jacques · comptine traditionnelle</p>
-  <span class="track-credit">CambridgeBayWeather · <a href="https://commons.wikimedia.org/wiki/File:Fr%C3%A8re_Jacques.ogg" target="_blank" rel="noreferrer">source audio</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noreferrer">CC BY-SA 3.0</a></span>
   <div class="lyrics" id="lyrics" aria-live="polite">
     <span>Are you sleeping? Are you sleeping?</span><span>Brother John, Brother John</span><span>Morning bells are ringing</span><span>Ding, ding, dong. Ding, ding, dong.</span>
   </div>
@@ -153,7 +158,7 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 <div id="print"></div>
 <script>
 (function(){
-var KEY='flocons:ouverts',demo=5,view=5,opened=[],pz=null,gender='boy',d3Start=null;
+var KEY='flocons:ouverts',demo=5,view=5,opened=[],pz=null,gender='boy',d3Start=null,gestureTimer=null;
 window.addEventListener('message',function(e){
 if(!e.data||e.data.type!=='flacon-version')return;
 gender=e.data.mode==='girl'?'girl':'boy';
@@ -191,6 +196,15 @@ audio.play().catch(function(){updateMusic()});
 updateMusic();
 }
 function stopMusic(){var audio=$('#song-audio');audio.pause();try{audio.currentTime=0}catch(e){}updateMusic()}
+function showGestureTip(){
+var tip=$('#gesture-tip');
+try{if(localStorage.getItem('flocon-3d-gestes-vus'))return;localStorage.setItem('flocon-3d-gestes-vus','1')}catch(e){}
+tip.hidden=false;gestureTimer=setTimeout(hideGestureTip,6500);
+}
+function hideGestureTip(){
+if(gestureTimer){clearTimeout(gestureTimer);gestureTimer=null}
+var tip=$('#gesture-tip');if(tip)tip.hidden=true;
+}
 function prepareSceneSnow(){
 ['#snow-back','#snow-front'].forEach(function(selector,layer){
 var target=$(selector);target.replaceChildren();
@@ -210,7 +224,7 @@ $('#song-audio').addEventListener('timeupdate',updateMusic);
 $('#song-audio').addEventListener('play',updateMusic);
 $('#song-audio').addEventListener('pause',updateMusic);
 $('#song-audio').addEventListener('ended',updateMusic);
-function today(){if(demo!==null)return demo;var n=new Date(),m=n.getMonth();return m<11?0:Math.min(n.getDate(),24)}
+function today(){return demo}
 function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function fk(n){
 var r=rng(n*7919+13),R=40,d='M0 0L0 '+(-R),nb=2+Math.floor(r()*3),i,t,y,len,a,dx,dy;
@@ -260,7 +274,7 @@ h+='<div class="day">Jour '+view+'</div>'+flakeSvg(view,'ghostfl')+'<p class="mu
 h+='</div>';
 if(view<=t&&isOpen(view))h+='<button class="shr" data-a="share" aria-label="Partager">'+icon('share',22)+'</button>';
 $('#stage').innerHTML=h;
-$('#demo').innerHTML='Mode essai · jour simulé : <button class="mini" data-a="dm" aria-label="Jour simulé précédent">−</button> <b>'+(demo===null?'date réelle ('+t+')':demo)+'</b> <button class="mini" data-a="dp" aria-label="Jour simulé suivant">+</button> <button class="mini" data-a="real">Date réelle</button>'}
+}
 function cell(d,t){
 var future=d>t,done=isOpen(d),cls='cell '+(future?'locked':(done?'done':'available'))+(d===t?' t':''),symbol=future?icon('lock',27):(done?icon('check',19):'<span class="status-dot" aria-hidden="true"></span>'),state=future?'verrouillé':(done?'validé':'à faire');
 return '<button class="'+cls+'" data-a="cell" data-i="'+d+'" aria-label="Jour '+d+', '+state+'"><span class="cell-symbol">'+symbol+'</span><span class="cell-day">'+d+'</span>'+(d===t?'<small>auj.</small>':'')+'</button>'}
@@ -339,7 +353,7 @@ T.g.rotation.set(rx*Math.PI/180,ry*Math.PI/180,0);
 T.r.render(T.sc,T.cam);
 raf=requestAnimationFrame(spin3)}
 function open3d(){
-$('#d3').hidden=false;parent.postMessage({type:'flacon-3d',open:true},'*');prepareSceneSnow();startMusic();rx=-18;ry=0;cancelAnimationFrame(raf);
+$('#d3').hidden=false;parent.postMessage({type:'flacon-3d',open:true},'*');prepareSceneSnow();showGestureTip();startMusic();rx=-18;ry=0;cancelAnimationFrame(raf);
 if(window.THREE){try{build3d();spin3();return}catch(e){}}
 old3d()}
 function old3d(){
@@ -350,7 +364,7 @@ function close3d(){cancelAnimationFrame(raf);stopMusic();$('#d3').hidden=true;pa
 function start(){$('#cover').hidden=true;$('#main').hidden=false;render()}
 document.addEventListener('click',function(e){
 var b=e.target.closest('[data-a]');if(!b)return;
-var a=b.getAttribute('data-a'),i=parseInt(b.getAttribute('data-i'),10),t=today();
+var a=b.getAttribute('data-a'),i=parseInt(b.getAttribute('data-i'),10);
 if(a==='start')start();
 else if(a==='prev')go(view-1);
 else if(a==='next')go(view+1);
@@ -371,9 +385,7 @@ else if(a==='d3close')close3d();
 else if(a==='sheet')openSheet();
 else if(a==='close')closeSheet();
 else if(a==='cell'){closeSheet();go(i)}
-else if(a==='dm'){demo=Math.max(0,(demo===null?t:demo)-1);render()}
-else if(a==='dp'){demo=Math.min(24,(demo===null?t:demo)+1);render()}
-else if(a==='real'){demo=null;render()}});
+});
 var sx=0,sy=0,sc0=0,sw=false;
 function swipe(dx,dy){
 if(Math.abs(dx)>60&&Math.abs(dy)<60)go(dx<0?view+1:view-1);
@@ -389,7 +401,7 @@ s3.addEventListener('pointerdown',function(e){drag=true;lx=e.clientX;ly=e.client
 s3.addEventListener('pointermove',function(e){if(!drag)return;ry+=(e.clientX-lx)*0.6;rx=Math.max(-80,Math.min(80,rx-(e.clientY-ly)*0.6));lx=e.clientX;ly=e.clientY});
 s3.addEventListener('pointerup',function(){drag=false});
 s3.addEventListener('pointercancel',function(){drag=false});
-d3.addEventListener('pointerdown',function(e){if(e.pointerType==='touch')d3Start={x:e.clientX,y:e.clientY}});
+d3.addEventListener('pointerdown',function(e){hideGestureTip();if(e.pointerType==='touch')d3Start={x:e.clientX,y:e.clientY}});
 d3.addEventListener('pointerup',function(e){if(d3Start&&e.clientY-d3Start.y>85&&Math.abs(e.clientX-d3Start.x)<100)close3d();d3Start=null});
 d3.addEventListener('pointercancel',function(){d3Start=null});
 document.addEventListener('keydown',function(e){
