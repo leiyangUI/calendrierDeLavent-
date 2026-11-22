@@ -60,10 +60,15 @@ h2{font-size:20px;margin:6px 0;font-weight:600}
 .sh{display:flex;justify-content:space-between;align-items:center}
 .x{width:44px;height:44px;border:0;background:transparent;font-size:26px}
 .g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.cell{height:62px;border:1px solid var(--line);border-radius:12px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.cell.t{border:2.5px solid var(--ink);font-weight:700}
-.cell.f{color:var(--muted)}
-.cell small{font-size:11px}
+.cell{height:70px;border:1px solid var(--line);border-radius:12px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted)}
+.cell.available,.cell.done{background:var(--cell-open,#dcebf8);border-color:var(--cell-line,#b4c9e0);color:var(--cell-ink,#12263f)}
+.cell.t{outline:2px solid var(--acc);outline-offset:1px;font-weight:700}
+.cell.locked{color:var(--ink)}
+.cell-symbol{height:25px;display:grid;place-items:center}
+.cell.locked .cell-symbol svg{width:27px;height:27px}
+.cell-day{font-size:14px;line-height:1;font-weight:700}
+.cell small{font-size:10px;line-height:1;color:var(--muted)}
+.status-dot{display:block;width:9px;height:9px;border-radius:50%;background:var(--cell-dot,#2563a8)}
 .lg{display:flex;justify-content:space-around;gap:8px;font-size:13px;color:var(--muted);margin:12px 0 0}
 .lg span{display:flex;align-items:center;gap:4px}
 #main{user-select:none;-webkit-user-select:none}
@@ -114,7 +119,7 @@ var old=document.getElementById('gender-theme');if(old)old.remove();
 document.documentElement.dataset.theme='light';
 if(gender==='girl'){
 var theme=document.createElement('style');theme.id='gender-theme';
-theme.textContent=':root{--bg:#fff2d8!important;--card:#fffdf8!important;--ink:#493b3b!important;--muted:#817575!important;--line:#eadbc7!important;--acc:#f04452!important;--on:#fff!important;--fk:#c92f42!important;--d3-glow:#f3b9aa!important;--d3-bg:#7e3f52!important;--d3-text:#fff7f0!important;--d3-muted:#ffe0d2!important}';
+theme.textContent=':root{--bg:#fff2d8!important;--card:#fffdf8!important;--ink:#493b3b!important;--muted:#817575!important;--line:#eadbc7!important;--acc:#e78bb4!important;--on:#fff!important;--fk:#c92f9f!important;--cell-open:#f8e3ee!important;--cell-line:#e8bfd3!important;--cell-ink:#493b3b!important;--cell-dot:#d76ca0!important;--d3-glow:#f3b9d0!important;--d3-bg:#7e3f62!important;--d3-text:#fff7f8!important;--d3-muted:#ffe0ec!important}';
 document.head.appendChild(theme);
 }
 });
@@ -174,12 +179,12 @@ if(view<=t&&isOpen(view))h+='<button class="shr" data-a="share" aria-label="Part
 $('#stage').innerHTML=h;
 $('#demo').innerHTML='Mode essai · jour simulé : <button class="mini" data-a="dm" aria-label="Jour simulé précédent">−</button> <b>'+(demo===null?'date réelle ('+t+')':demo)+'</b> <button class="mini" data-a="dp" aria-label="Jour simulé suivant">+</button> <button class="mini" data-a="real">Date réelle</button>'}
 function cell(d,t){
-var cls='cell'+(d===t?' t':'')+(d>t?' f':''),ic=d>t?'lock':(isOpen(d)?'check':'mail');
-return '<button class="'+cls+'" data-a="cell" data-i="'+d+'" aria-label="Jour '+d+(d>t?', pas encore':(isOpen(d)?', ouvert':', à ouvrir'))+'"><span>'+d+'</span>'+icon(ic)+(d===t?'<small>auj.</small>':'')+'</button>'}
+var future=d>t,done=isOpen(d),cls='cell '+(future?'locked':(done?'done':'available'))+(d===t?' t':''),symbol=future?icon('lock',27):(done?icon('check',19):'<span class="status-dot" aria-hidden="true"></span>'),state=future?'verrouillé':(done?'validé':'à faire');
+return '<button class="'+cls+'" data-a="cell" data-i="'+d+'" aria-label="Jour '+d+', '+state+'"><span class="cell-symbol">'+symbol+'</span><span class="cell-day">'+d+'</span>'+(d===t?'<small>auj.</small>':'')+'</button>'}
 function openSheet(){
 var t=today(),h='<div class="grab"></div><div class="sh"><h2>Tous les jours</h2><button class="x" data-a="close" aria-label="Fermer">×</button></div><div class="g">',d;
 for(d=1;d<=24;d++)h+=cell(d,t);
-h+='</div><p class="lg"><span>'+icon('check')+' ouvert</span><span>'+icon('mail')+' à ouvrir</span><span>'+icon('lock')+' pas encore</span></p>';
+h+='</div><p class="lg"><span>'+icon('check')+' validé</span><span><i class="status-dot"></i> à faire</span><span>'+icon('lock')+' pas encore commencé</span></p>';
 $('#sheet').innerHTML=h;$('#sheet').hidden=false;$('#veil').hidden=false}
 function closeSheet(){$('#sheet').hidden=true;$('#veil').hidden=true}
 function go(n){view=Math.max(1,Math.min(24,n));pz=null;render()}
